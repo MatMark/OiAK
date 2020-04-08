@@ -6,13 +6,17 @@ EXIT_SUCCESS = 0
 first_num_msg: .string "Podaj pierwsza liczbe: "
 second_num_msg: .string "Podaj druga liczbe: "
 operator_msg: .string "Podaj operacje do wykonania [+, -, *, /]: "
-value: .string "  %.7f\n"
-out: .string "%c______________________________________________\n  %.7f\n"
-in: .ascii "%f"
-number_1: .float 0
-number_2: .float 0
+value: .string "  %.16lf\n"
+out: .string "%c______________________________________________\n  %.16lf\n"
+in: .ascii "%lf"
+number_1: .double 0
+number_2: .double 0
 operator: .ascii ""
 in_operator: .string "%c"
+duble_num_1: .double 0
+duble_num_2: .double 0
+result: .double 15.22
+
 .text
 
 .global _start
@@ -47,21 +51,27 @@ call scanf
 finit 
 
 #wyswietlenie pierwszej wprowadzonej liczby w formacie liczby zmiennoprzecinkowej
-fld number_1 #zaladowanie na stos fpu st(0)
-fstl (%esp) #przeniesienie ze stosu fpu
+fldl number_1+4 #zaladowanie na stos fpu st(0)
+fldl number_1
+fstl (duble_num_1) #przeniesienie ze stosu fpu
+pushl duble_num_1+4
+pushl duble_num_1
 pushl $value
 call printf 
 
 #wyswietlenie drugiej wprowadzonej liczby w formacie liczby zmiennoprzecinkowej
-fld number_2 #zaladowanie na stos fpu st(0)
-fstl (%esp) #przeniesienie ze stosu fpu
+fldl number_2+4 #zaladowanie na stos fpu st(0)
+fldl number_2
+fstl (duble_num_1) #przeniesienie ze stosu fpu
+pushl duble_num_1+4
+pushl duble_num_1
 pushl $value
-call printf
+call printf 
 
 load:
-fld number_2
+fldl number_2
 fst %st(1) # skopiuj st(0) do st(1)
-fld number_1
+fldl number_1 
 
 #skok do odpowiedniej operacji
 movb operator, %dl #dolny bajt dx
@@ -94,7 +104,9 @@ jmp print
 
 #wyswietlenie wyniku
 print:
-fstl (%esp) #przeniesienie ze stosu fpu
+fstl (result) #przeniesienie ze stosu fpu
+pushl result+4
+pushl result
 pushl %edx
 pushl $out
 call printf
