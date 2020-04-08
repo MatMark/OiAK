@@ -3,23 +3,36 @@ SYSCALL32 = 0x80
 EXIT_SUCCESS = 0
 
 .data
-# F0304008101100F04510002008570030
-# F040500CD2205020321000CB04520031
-# +_______________________________
-# 1E0709014E2315110772000EB0CA90061
-number_1:
-    	.long 0xF0304008, 0x101100F0, 0x45100020, 0x08570030
-		#.long 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-number_2:
-    	.long 0xF040500C, 0xD2205020, 0x321000CB, 0x04520031
-		#.long 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
-result: 
-        .long 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000
+
+number_1: .long 0xF0304008, 0x101100F0, 0x45100020, 0x08570030
+number_2: .long 0xF040500C, 0xD2205020, 0x321000CB, 0x04520031
+result: .long 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000
+out_num: .string "\t\t%08X%08X%08X%08X\n"
+out_res: .string "+_______________________________________________\n\t%08X%08X%08X%08X%08X\n"
+
 .text
 .global _start
 _start:
+
+#wyswietlenie pierwszej liczby
+pushl number_1+12
+pushl number_1+8
+pushl number_1+4
+pushl number_1
+pushl $out_num
+call printf
+
+#wyswietlenie drugiej liczby
+pushl number_2+12
+pushl number_2+8
+pushl number_2+4
+pushl number_2
+pushl $out_num
+call printf
+
 #licznik do petli
 movl $4, %ecx
+
 _next:
 #zapewnienie, ze wejdziemy tez do zerowego elementu gdyz "loop" przy wartosci rejestru ecx rownym zero nie wykonuje skoku 
 decl %ecx
@@ -35,6 +48,7 @@ jnc _no_carry
 incl result(, %ecx, 4)
 #wyzerowanie flagi przeniesienia
 clc
+
 _no_carry:
 #przywrocenie normalnej wartosci rejestru ecx
 incl %ecx
@@ -42,7 +56,18 @@ incl %ecx
 addl %ebx, result(, %ecx, 4)
 #sprawdzenie warunku petli
 loop _next
+
+#wyswietlenie wyniku
+pushl result+16
+pushl result+12
+pushl result+8
+pushl result+4
+pushl result
+pushl $out_res
+call printf
+
 #zakonczenie programu
+_end:
 movl $SYSEXIT, %eax
 movl $EXIT_SUCCESS, %ebx
 int $SYSCALL32

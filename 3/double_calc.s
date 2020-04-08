@@ -15,7 +15,7 @@ operator: .ascii ""
 in_operator: .string "%c"
 duble_num_1: .double 0
 duble_num_2: .double 0
-result: .double 15.22
+result: .double 0
 
 .text
 
