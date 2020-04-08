@@ -73,6 +73,9 @@ fldl number_2
 fst %st(1) # skopiuj st(0) do st(1)
 fldl number_1 
 
+#wyczyszczenie rejestru edx
+xor %edx, %edx 
+
 #skok do odpowiedniej operacji
 movb operator, %dl #dolny bajt dx
 cmpb $'+', %dl
