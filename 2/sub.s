@@ -1,16 +1,19 @@
 SYSEXIT = 1
 SYSCALL32 = 0x80
 EXIT_SUCCESS = 0
-# 0F304008 101100F0 45100020 08570030
-# 0F40500C D2205020 321000CB 54520031
-#-___________________________________
-# FFEFEFFB 3DF0B0D0 12FFFF54 B404FFFF
+
 .data
-number_1: .long 0x0F304008, 0x101100F0, 0x45100020, 0x08570030
-number_2: .long 0x0F40500C, 0xD2205020, 0x321000CB, 0x54520031
-result: .long 0x00000000, 0x00000000, 0x00000000, 0x00000000
-out_num: .string "\t%08X%08X%08X%08X\n"
-out_res: .string "-_______________________________________\n\t%08X%08X%08X%08X\n"
+
+number_1: 
+    .long 0x0F304008, 0x101100F0, 0x45100020, 0x08570030
+number_2: 
+    .long 0x0F40500C, 0xD2205020, 0x321000CB, 0x54520031
+result: 
+    .long 0x00000000, 0x00000000, 0x00000000, 0x00000000
+out_num: 
+    .string "\t%08X%08X%08X%08X\n"
+out_res: 
+    .string "-\t________________________________\n\t%08X%08X%08X%08X\n"
 
 .text
 .global _start
@@ -24,6 +27,7 @@ pushl number_1+4
 pushl number_1
 pushl $out_num
 call printf
+addl $20, %esp
 
 #wyswietlenie drugiej liczby
 pushl number_2+12
@@ -32,12 +36,15 @@ pushl number_2+4
 pushl number_2
 pushl $out_num
 call printf
+addl $20, %esp
 
 #licznik do petli
 movl $4, %ecx
 
 _next:
-#zapewnienie, ze wejdziemy tez do zerowego elementu gdyz "loop" przy wartosci rejestru ecx rownym zero nie wykonuje skoku 
+#zapewnienie, ze wejdziemy tez do zerowego 
+#elementu gdyz "loop" przy wartosci rejestru 
+#ecx rownym zero nie wykonuje skoku 
 decl %ecx
 #zaladowanie odpowiednich czesci liczb do rejestrow eax i ebx
 movl number_1(, %ecx, 4), %eax
@@ -53,7 +60,8 @@ incl %ecx
 clc
 
 _no_burrow:
-#wynik jest sumowany z ewentualna pozyczka (jezeli wystapila pozyczka element ma wartosc -1 [0xffffffff])
+#wynik jest sumowany z ewentualna pozyczka 
+#(jezeli wystapila pozyczka element ma wartosc -1 [0xffffffff])
 addl %eax, result(, %ecx, 4)
 #przywrocenie normalnej wartosci rejestru ecx
 incl %ecx
@@ -66,6 +74,7 @@ pushl result+4
 pushl result
 pushl $out_res
 call printf
+addl $20, %esp
 
 #zakonczenie programu
 _end:
