@@ -10,7 +10,7 @@
 //2048 = 4*512
 //4096 = 4*1024
 //8192 = 4*2048
-#define sizeTable 819200
+#define table_size 2048
 #define MAX 999999.0f
 #define MIN 100000.0f
 
@@ -23,10 +23,10 @@ struct vector {
 };
 
 struct result {
-    struct vector sum[sizeTable];
-    struct vector sub[sizeTable];
-    struct vector mul[sizeTable];
-    struct vector div[sizeTable];
+    struct vector sum[table_size];
+    struct vector sub[table_size];
+    struct vector mul[table_size];
+    struct vector div[table_size];
 };
 
 struct times {

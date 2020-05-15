@@ -4,135 +4,51 @@
 
 #include "SISD.h"
 
-void SISD_SUM(struct vector a, struct vector b, struct vector *res) {
+void SISD_SUM(float a, float b, const float *res) {
     asm(
-    "fld %4\n\t"
-    "fadd %8\n\t"
+    "fld %1\n\t"
+    "fadd %2\n\t"
     "fstp %0\n\t"
 
-    "fld %5\n\t"
-    "fadd %7\n\t"
-    "fstp %1\n\t"
-
-    "fld %6\n\t"
-    "fadd %10\n\t"
-    "fstp %2\n\t"
-
-    "fld %7\n\t"
-    "fadd %11\n\t"
-    "fstp %3\n\t"
-
-    :    "=m" (res->a), //0
-    "=m" (res->b),      //1
-    "=m" (res->c),      //2
-    "=m" (res->d)       //3
-    :    "m" (a.a),     //4
-    "m" (a.b),          //5
-    "m" (a.c),          //6
-    "m" (a.d),          //7
-    "m" (b.a),          //8
-    "m" (b.b),          //9
-    "m" (b.c),          //10
-    "m" (b.d)           //11
+    :"=m" (res)
+    :"m" (a),
+    "m" (b)
     );
 }
 
-void SISD_SUB(struct vector a, struct vector b, struct vector *res) {
+void SISD_SUB(float a, float b, const float *res) {
     asm(
-    "fld %4\n\t"
-    "fsub %8\n\t"
+    "fld %1\n\t"
+    "fsub %2\n\t"
     "fstp %0\n\t"
 
-    "fld %5\n\t"
-    "fsub %7\n\t"
-    "fstp %1\n\t"
-
-    "fld %6\n\t"
-    "fsub %10\n\t"
-    "fstp %2\n\t"
-
-    "fld %7\n\t"
-    "fsub %11\n\t"
-    "fstp %3\n\t"
-
-    :    "=m" (res->a), //0
-    "=m" (res->b),      //1
-    "=m" (res->c),      //2
-    "=m" (res->d)       //3
-    :    "m" (a.a),     //4
-    "m" (a.b),          //5
-    "m" (a.c),          //6
-    "m" (a.d),          //7
-    "m" (b.a),          //8
-    "m" (b.b),          //9
-    "m" (b.c),          //10
-    "m" (b.d)           //11
+    :"=m" (res)
+    :"m" (a),
+    "m" (b)
     );
 }
 
-void SISD_MUL(struct vector a, struct vector b, struct vector *res) {
+void SISD_MUL(float a, float b, const float *res) {
     asm(
-    "fld %4\n\t"
-    "fmul %8\n\t"
+    "fld %1\n\t"
+    "fmul %2\n\t"
     "fstp %0\n\t"
 
-    "fld %5\n\t"
-    "fmul %7\n\t"
-    "fstp %1\n\t"
-
-    "fld %6\n\t"
-    "fmul %10\n\t"
-    "fstp %2\n\t"
-
-    "fld %7\n\t"
-    "fmul %11\n\t"
-    "fstp %3\n\t"
-
-    :    "=m" (res->a), //0
-    "=m" (res->b),      //1
-    "=m" (res->c),      //2
-    "=m" (res->d)       //3
-    :    "m" (a.a),     //4
-    "m" (a.b),          //5
-    "m" (a.c),          //6
-    "m" (a.d),          //7
-    "m" (b.a),          //8
-    "m" (b.b),          //9
-    "m" (b.c),          //10
-    "m" (b.d)           //11
+    :"=m" (res)
+    :"m" (a),
+    "m" (b)
     );
 }
 
-void SISD_DIV(struct vector a, struct vector b, struct vector *res) {
+void SISD_DIV(float a, float b, const float *res) {
     asm(
-    "fld %4\n\t"
-    "fdiv %8\n\t"
+    "fld %1\n\t"
+    "fdiv %2\n\t"
     "fstp %0\n\t"
 
-    "fld %5\n\t"
-    "fdiv %7\n\t"
-    "fstp %1\n\t"
-
-    "fld %6\n\t"
-    "fdiv %10\n\t"
-    "fstp %2\n\t"
-
-    "fld %7\n\t"
-    "fdiv %11\n\t"
-    "fstp %3\n\t"
-
-    :    "=m" (res->a), //0
-    "=m" (res->b),      //1
-    "=m" (res->c),      //2
-    "=m" (res->d)       //3
-    :    "m" (a.a),     //4
-    "m" (a.b),          //5
-    "m" (a.c),          //6
-    "m" (a.d),          //7
-    "m" (b.a),          //8
-    "m" (b.b),          //9
-    "m" (b.c),          //10
-    "m" (b.d)           //11
+    :"=m" (res)
+    :"m" (a),
+    "m" (b)
     );
 }
 
@@ -143,25 +59,37 @@ void SISD_run_test(int size, int repeats, struct vector *a, struct vector *b, st
         //sum
         time = clock();
         for (int j = 0; j < size; j++) {
-            SISD_SUM(a[j], b[j], &result->sum[j]);
+            SISD_SUM(a[j].a, b[j].a, &result->sum[j].a);
+            SISD_SUM(a[j].b, b[j].b, &result->sum[j].b);
+            SISD_SUM(a[j].c, b[j].c, &result->sum[j].c);
+            SISD_SUM(a[j].d, b[j].d, &result->sum[j].d);
         }
         sisd_times->sum += ((double) clock() - time) / CLOCKS_PER_SEC;
         //sub
         time = clock();
         for (int j = 0; j < size; j++) {
-            SISD_SUB(a[j], b[j], &result->sub[j]);
+            SISD_SUB(a[j].a, b[j].a, &result->sub[j].a);
+            SISD_SUB(a[j].b, b[j].b, &result->sub[j].b);
+            SISD_SUB(a[j].c, b[j].c, &result->sub[j].c);
+            SISD_SUB(a[j].d, b[j].d, &result->sub[j].d);
         }
         sisd_times->sub += ((double) clock() - time) / CLOCKS_PER_SEC;
         //mul
         time = clock();
         for (int j = 0; j < size; j++) {
-            SISD_MUL(a[j], b[j], &result->mul[j]);
+            SISD_MUL(a[j].a, b[j].a, &result->mul[j].a);
+            SISD_MUL(a[j].b, b[j].b, &result->mul[j].b);
+            SISD_MUL(a[j].c, b[j].c, &result->mul[j].c);
+            SISD_MUL(a[j].d, b[j].d, &result->mul[j].d);
         }
         sisd_times->mul += ((double) clock() - time) / CLOCKS_PER_SEC;
         //div
         time = clock();
         for (int j = 0; j < size; j++) {
-            SISD_DIV(a[j], b[j], &result->div[j]);
+            SISD_DIV(a[j].a, b[j].a, &result->div[j].a);
+            SISD_DIV(a[j].b, b[j].b, &result->div[j].b);
+            SISD_DIV(a[j].c, b[j].c, &result->div[j].c);
+            SISD_DIV(a[j].d, b[j].d, &result->div[j].d);
         }
         sisd_times->div += ((double) clock() - time) / CLOCKS_PER_SEC;
     }
