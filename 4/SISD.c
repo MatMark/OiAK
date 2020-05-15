@@ -4,11 +4,12 @@
 
 #include "SISD.h"
 
+//dodawanie przy pomocy FPU
 void SISD_SUM(float a, float b, const float *res) {
     asm(
-    "fld %1\n\t"
-    "fadd %2\n\t"
-    "fstp %0\n\t"
+    "fld %1;"
+    "fadd %2;"
+    "fstp %0;"
 
     :"=m" (res)
     :"m" (a),
@@ -16,11 +17,12 @@ void SISD_SUM(float a, float b, const float *res) {
     );
 }
 
+//odejmowanie przy pomocy FPU
 void SISD_SUB(float a, float b, const float *res) {
     asm(
-    "fld %1\n\t"
-    "fsub %2\n\t"
-    "fstp %0\n\t"
+    "fld %1;"
+    "fsub %2;"
+    "fstp %0;"
 
     :"=m" (res)
     :"m" (a),
@@ -28,11 +30,12 @@ void SISD_SUB(float a, float b, const float *res) {
     );
 }
 
+//mnozenie przy pomocy FPU
 void SISD_MUL(float a, float b, const float *res) {
     asm(
-    "fld %1\n\t"
-    "fmul %2\n\t"
-    "fstp %0\n\t"
+    "fld %1;"
+    "fmul %2;"
+    "fstp %0;"
 
     :"=m" (res)
     :"m" (a),
@@ -40,11 +43,12 @@ void SISD_MUL(float a, float b, const float *res) {
     );
 }
 
+//dzielenie przy pomocy FPU
 void SISD_DIV(float a, float b, const float *res) {
     asm(
-    "fld %1\n\t"
-    "fdiv %2\n\t"
-    "fstp %0\n\t"
+    "fld %1;"
+    "fdiv %2;"
+    "fstp %0;"
 
     :"=m" (res)
     :"m" (a),
@@ -52,6 +56,7 @@ void SISD_DIV(float a, float b, const float *res) {
     );
 }
 
+//wykonanie testow wszystkich operacji
 void SISD_run_test(int size, int repeats, struct vector *a, struct vector *b, struct result *result,
                    struct times *sisd_times) {
     clock_t time;
@@ -93,6 +98,7 @@ void SISD_run_test(int size, int repeats, struct vector *a, struct vector *b, st
         }
         sisd_times->div += ((double) clock() - time) / CLOCKS_PER_SEC;
     }
+    //usrednienie czasow obliczen
     sisd_times->sum /= repeats;
     sisd_times->sub /= repeats;
     sisd_times->mul /= repeats;

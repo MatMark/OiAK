@@ -22,6 +22,7 @@ struct vector {
     float d;
 };
 
+//struktura zawierajaca wyniki poszczegolnych obliczen
 struct result {
     struct vector sum[table_size];
     struct vector sub[table_size];
@@ -29,6 +30,7 @@ struct result {
     struct vector div[table_size];
 };
 
+//struktura zawierajaca czasy obliczen
 struct times {
     double sum;
     double sub;
@@ -36,8 +38,10 @@ struct times {
     double div;
 };
 
+//wylosowanie liczby typu float
 float random_float_num();
 
+//wypelnienie wektora losowymi liczbami typu float
 void fill_float_vector(struct vector vec[], int size);
 
 #endif //INC_4_MY_VECTORS_H

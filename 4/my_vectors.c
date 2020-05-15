@@ -4,6 +4,7 @@
 
 #include "my_vectors.h"
 
+//wylosowanie liczby typu float
 float random_float_num() {
     float num = (MIN + 1) + (((float) rand()) / (float) RAND_MAX) * (MAX - (MIN + 1));
     int sign = rand() % 2;
@@ -11,6 +12,7 @@ float random_float_num() {
     return num;
 }
 
+//wypelnienie wektora losowymi liczbami typu float
 void fill_float_vector(struct vector vec[], int size) {
     for (int i = 0; i < size; i++) {
         vec[i].a = random_float_num();

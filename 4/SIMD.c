@@ -4,50 +4,55 @@
 
 #include "SIMD.h"
 
+//dodawanie przy uzyciu SSE
 void SIMD_SUM(struct vector a, struct vector b, struct vector *res) {
     asm(
-    "movaps %1, %%xmm0\n\t"
-    "movaps %2, %%xmm1\n\t"
-    "addps %%xmm1, %%xmm0\n\t"
-    "movaps %%xmm0, %0\n\t"
-    : "=m" (*res)
-    : "m" (a), "m" (b)
+    "movaps %1, %%xmm0;"
+    "movaps %2, %%xmm1;"
+    "addps %%xmm1, %%xmm0;"
+    "movaps %%xmm0, %0;"
+    :"=m" (*res)
+    :"m" (a), "m" (b)
     );
 }
 
+//odejmowanie przy uzyciu SSE
 void SIMD_SUB(struct vector a, struct vector b, struct vector *res) {
     asm(
-    "movaps %1, %%xmm0\n\t"
-    "movaps %2, %%xmm1\n\t"
-    "subps %%xmm1, %%xmm0\n\t"
-    "movaps %%xmm0, %0\n\t"
-    : "=m" (*res)
-    : "m" (a), "m" (b)
+    "movaps %1, %%xmm0;"
+    "movaps %2, %%xmm1;"
+    "subps %%xmm1, %%xmm0;"
+    "movaps %%xmm0, %0;"
+    :"=m" (*res)
+    :"m" (a), "m" (b)
     );
 }
 
+//mnozenie przy uzyciu SSE
 void SIMD_MUL(struct vector a, struct vector b, struct vector *res) {
     asm(
-    "movaps %1, %%xmm0\n\t"
-    "movaps %2, %%xmm1\n\t"
-    "mulps %%xmm1, %%xmm0\n\t"
-    "movaps %%xmm0, %0\n\t"
-    : "=m" (*res)
-    : "m" (a), "m" (b)
+    "movaps %1, %%xmm0;"
+    "movaps %2, %%xmm1;"
+    "mulps %%xmm1, %%xmm0;"
+    "movaps %%xmm0, %0;"
+    :"=m" (*res)
+    :"m" (a), "m" (b)
     );
 }
 
+//dzielenie przy uzyciu SSE
 void SIMD_DIV(struct vector a, struct vector b, struct vector *res) {
     asm(
-    "movaps %1, %%xmm0\n\t"
-    "movaps %2, %%xmm1\n\t"
-    "divps %%xmm1, %%xmm0\n\t"
-    "movaps %%xmm0, %0\n\t"
-    : "=m" (*res)
-    : "m" (a), "m" (b)
+    "movaps %1, %%xmm0;"
+    "movaps %2, %%xmm1;"
+    "divps %%xmm1, %%xmm0;"
+    "movaps %%xmm0, %0;"
+    :"=m" (*res)
+    :"m" (a), "m" (b)
     );
 }
 
+//wykonanie testow wszystkich operacji
 void SIMD_run_test(int size, int repeats, struct vector *a, struct vector *b, struct result *result,
                    struct times *simd_times) {
     clock_t time;
@@ -77,6 +82,7 @@ void SIMD_run_test(int size, int repeats, struct vector *a, struct vector *b, st
         }
         simd_times->div += ((double) clock() - time) / CLOCKS_PER_SEC;
     }
+    //usrednienie czasow obliczen
     simd_times->sum /= repeats;
     simd_times->sub /= repeats;
     simd_times->mul /= repeats;

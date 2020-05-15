@@ -9,6 +9,7 @@
 #include <string.h>
 #include "my_vectors.h"
 
+//zapis czasow obliczen do pliku
 void save(char type[], struct times *SIMD_times);
 
 #endif //INC_4_RESULT_SAVER_H

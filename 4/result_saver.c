@@ -4,11 +4,13 @@
 
 #include "result_saver.h"
 
+//zapis czasow obliczen do pliku
 void save(char type[], struct times *res_times) {
     FILE *file;
     char file_name[14] = "";
     char numbers[10];
 
+    //nazwa pliku wynikowego to {typ}_{liczba liczb}.txt np. SIMD_8192.txt
     sprintf(numbers, "_%d.txt", (4 * table_size));
     strcat(file_name, type);
     strcat(file_name, numbers);
